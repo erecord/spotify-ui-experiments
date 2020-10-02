@@ -1,6 +1,9 @@
 <template>
   <div>
-    <button @click="handleTogglePlay">Play</button>
+    <!-- Buttons -->
+    <div>
+      <button @click="handleTogglePlay">Play</button>
+    </div>
   </div>
 </template>
 
@@ -14,6 +17,7 @@ export default {
     const { app, params } = useContext();
 
     const trackUri = params.value.uri;
+
     let player;
 
     const onSpotifyWebPlaybackSDKReady = () => {

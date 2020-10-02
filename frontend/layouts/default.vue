@@ -27,4 +27,8 @@ html {
 body {
   background: rgb(32, 32, 35);
 }
+
+.bg-secondary {
+  background: rgb(29, 19, 31);
+}
 </style>

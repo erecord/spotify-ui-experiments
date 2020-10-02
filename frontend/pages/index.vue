@@ -1,20 +1,15 @@
 <template>
   <client-only>
-    <div>
+    <div class="container w-screen">
+      <img src="../assets/public/imgs/cassette_2.jpg" />
       <div v-if="html"><span v-html="response"></span></div>
-      <div class="text-white text-center mt-10">
-        <h2 class="text-3xl">Log In Below</h2>
-        <!-- <button class="px-2 bg-gray-300 text-black mt-4" @click="handleLogin">
-          Click me!
-        </button> -->
+      <div class=" login-text">
+        <h2 class="text-3xl md:text-5xl mb-8">Log In Below</h2>
 
         <div class="mt-4" v-if="error">
           <p>{{ err }}</p>
         </div>
-        <p>{{ response }}</p>
-
-        <a :href="spotifyAuthUrl">Authorise</a>
-        <!-- <button @click="handleLogin">Authorise</button> -->
+        <a class="btn md:text-2xl" :href="spotifyAuthUrl">Authorise</a>
       </div>
     </div>
   </client-only>
@@ -54,17 +49,28 @@ export default {
 </script>
 
 <style>
-/* Sample `apply` at-rules with Tailwind CSS
-.container {
-@apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+*/ .container {
+  position: relative;
   text-align: center;
+  color: white;
+  width: 100vw;
+  height: 100vh;
+}
+img {
+  object-fit: cover;
+  object-position: center;
+  min-width: 100vw;
+  height: 100vh;
+}
+
+.login-text {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  @apply text-white text-center absolute;
+}
+.btn {
+  background: rgb(0, 104, 104);
+  @apply px-2 py-1 rounded-sm;
 }
 </style>
