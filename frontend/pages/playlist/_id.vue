@@ -1,14 +1,10 @@
 <template>
   <div>
-    <div
-      v-if="playlistInfo"
-      class="text-center text-white text-2xl mt-5 mb-10 "
-    >
-      <!-- <img :src="playlistInfo.images[0].url" alt="Playlist Image" /> -->
+    <div class="text-center text-white text-2xl mt-5 mb-10 ">
       <h3>
         {{ playlistInfo.name }}
       </h3>
-      <h4 class="text-sm font-light">
+      <h4 v-if="playlistInfo.owner" class="text-sm font-light">
         Created By {{ playlistInfo.owner.display_name }}
       </h4>
     </div>
