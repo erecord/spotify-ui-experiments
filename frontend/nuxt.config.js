@@ -27,7 +27,7 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: ["@nuxtjs/axios", "@nuxtjs/composition-api"],
+  modules: ["@nuxtjs/axios", "@nuxtjs/composition-api", "@nuxtjs/pwa"],
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {}
