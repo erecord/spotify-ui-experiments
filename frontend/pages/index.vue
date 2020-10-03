@@ -21,9 +21,7 @@ export default {
     return {
       client_id: "65ccdc6f18874cb78e134e15b9465098",
       client_secret: "7ad289318252493f9d34ca93b93908a3",
-
-      redirect_uri: "https://spotify-pwa-enl.netlify.app/home",
-      // redirect_uri: "http://localhost:3000/spotifyAuth",
+      redirect_uri: `${process.env.NUXT_ENV_FRONTEND_URL}/spotifyAuth`,
       scopes:
         "user-read-private user-read-email playlist-read-private streaming",
       error: false,

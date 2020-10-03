@@ -20,8 +20,7 @@ export default defineComponent({
     onMounted(() => {
       const resultSuccess = setAuthTokens(
         code,
-        // "http://localhost:3000/spotifyAuth"
-        "https://spotify-pwa-enl.netlify.app/home"
+        `${process.env.NUXT_ENV_FRONTEND_URL}/spotifyAuth`
       ).then(() => {
         console.log(code);
       });
