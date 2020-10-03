@@ -8,6 +8,7 @@ const refreshToken = ref("");
 const playlists = ref([]);
 const playlist = ref({});
 const playlistInfo = ref({});
+const devices = ref({});
 
 export default function() {
   // const state = reactive({ accessToken: "", refreshToken: "", playlists: [] });
@@ -98,6 +99,64 @@ export default function() {
     }
   };
 
+  const getDevices = async () => {
+    try {
+      const response = await app.$axios.$get(
+        `https://api.spotify.com/v1/me/player/devices`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken.value}`
+          }
+        }
+      );
+
+      devices.value = response;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const playSongOnDevice = async (id, trackUri) => {
+    const response = await app.$axios.$put(
+      `https://api.spotify.com/v1/me/player/play?device_id=${id}`,
+      {
+        uris: [trackUri]
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken.value}`
+        }
+      }
+    );
+  };
+
+  const play = async id => {
+    const response = await app.$axios.$put(
+      `https://api.spotify.com/v1/me/player/play?device_id=${id}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken.value}`
+        }
+      }
+    );
+  };
+
+  const pause = async id => {
+    const response = await app.$axios.$put(
+      `https://api.spotify.com/v1/me/player/pause?device_id=${id}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken.value}`
+        }
+      }
+    );
+  };
+
   return {
     playlists,
     accessToken,
@@ -105,6 +164,11 @@ export default function() {
     getPlaylists,
     getPlaylist,
     playlist,
-    playlistInfo
+    playlistInfo,
+    getDevices,
+    devices,
+    playSongOnDevice,
+    play,
+    pause
   };
 }

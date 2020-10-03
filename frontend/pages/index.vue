@@ -1,75 +1,54 @@
 <template>
-  <client-only>
-    <div class="container w-screen">
-      <img src="../assets/public/imgs/cassette_2.jpg" />
-      <div v-if="html"><span v-html="response"></span></div>
-      <div class=" login-text">
-        <h2 class="text-3xl md:text-5xl mb-8">Log In Below</h2>
-
-        <div class="mt-4" v-if="error">
-          <p>{{ err }}</p>
+  <div class="bg-primary">
+    <div class="text-center text-white text-3xl py-5">
+      <h1>Spotify PWA</h1>
+    </div>
+    <div class="md:mx-32 mx-5">
+      <div>
+        <h2 class="text-white text-2xl font-light">Playlists</h2>
+      </div>
+      <div
+        v-if="playlists"
+        class="text-white md:grid md:grid-cols-4 grid grid-cols-2 gap-5  mt-1 "
+      >
+        <div
+          class="grid bg-secondary pb-2  rounded-md card"
+          v-for="(playlist, index) in playlists"
+          :key="index"
+        >
+          <nuxt-link :to="{ name: 'playlist-id', params: { id: playlist.id } }">
+            <img :src="playlist.images[0].url" />
+            <p class="text-center md:text-xl pt-2 px-1">
+              {{ playlist.name }}
+            </p></nuxt-link
+          >
         </div>
-        <a class="btn md:text-2xl" :href="spotifyAuthUrl">Authorise</a>
       </div>
     </div>
-  </client-only>
+  </div>
 </template>
 
 <script>
+import { onMounted } from "@nuxtjs/composition-api";
+import useSpotify from "../hooks/useSpotify";
+
 export default {
-  data() {
-    return {
-      client_id: "65ccdc6f18874cb78e134e15b9465098",
-      client_secret: "7ad289318252493f9d34ca93b93908a3",
-      redirect_uri: `${process.env.NUXT_ENV_FRONTEND_URL}/spotifyAuth`,
-      scopes:
-        "user-read-private user-read-email playlist-read-private streaming",
-      error: false,
-      err: "",
-      cors: "https://intense-lake-39668.herokuapp.com",
-      response: "",
-      html: false
-    };
-  },
-  computed: {
-    spotifyAuthUrl: function() {
-      return (
-        "https://accounts.spotify.com/authorize" +
-        "?response_type=code" +
-        "&client_id=" +
-        this.client_id +
-        (this.scopes ? "&scope=" + encodeURIComponent(this.scopes) : "") +
-        "&redirect_uri=" +
-        encodeURIComponent(this.redirect_uri)
-      );
-    }
+  middleware: "auth",
+  setup() {
+    const { accessToken, getPlaylists, playlists } = useSpotify();
+
+    onMounted(async () => {
+      await getPlaylists();
+    });
+
+    return { accessToken, playlists };
   }
 };
 </script>
 
 <style>
-*/ .container {
-  position: relative;
-  text-align: center;
-  color: white;
-  width: 100vw;
-  height: 100vh;
-}
-img {
-  object-fit: cover;
-  object-position: center;
-  min-width: 100vw;
-  height: 100vh;
-}
-
-.login-text {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -100%);
-  @apply text-white text-center absolute;
-}
-.btn {
-  background: rgb(0, 104, 104);
-  @apply px-2 py-1 rounded-sm;
+.card:hover {
+  opacity: 0.9;
+  transform: translateY(-1%);
 }
 </style>

@@ -26,7 +26,7 @@ export default defineComponent({
       });
 
       if (resultSuccess) {
-        redirect("/home");
+        redirect("/");
       } else {
         console.error("spotifyAuth failed to set auth tokens");
       }
