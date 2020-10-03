@@ -5,14 +5,16 @@
     </div>
     <div class="md:mx-32 mx-5">
       <div>
-        <h2 class="text-white text-2xl font-light">Playlists</h2>
+        <nuxt-link to="/user-playlists"
+          ><h2 class="text-white text-2xl font-light">Playlists</h2></nuxt-link
+        >
       </div>
       <div
         v-if="playlists"
-        class="text-white md:grid md:grid-cols-4 grid grid-cols-2 gap-5  mt-1 "
+        class="text-white md:grid md:grid-cols-5 grid grid-cols-2 gap-5 mt-1"
       >
         <div
-          class="grid bg-secondary pb-2  rounded-md card"
+          class="grid bg-secondary pb-2 rounded-md card"
           v-for="(playlist, index) in playlists"
           :key="index"
         >
@@ -38,11 +40,11 @@ export default {
     const { accessToken, getPlaylists, playlists } = useSpotify();
 
     onMounted(async () => {
-      await getPlaylists();
+      await getPlaylists(10);
     });
 
     return { accessToken, playlists };
-  }
+  },
 };
 </script>
 

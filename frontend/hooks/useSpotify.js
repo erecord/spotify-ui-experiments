@@ -9,6 +9,7 @@ const playlists = ref([]);
 const playlist = ref({});
 const playlistInfo = ref({});
 const devices = ref({});
+const track = ref({});
 
 export default function() {
   // const state = reactive({ accessToken: "", refreshToken: "", playlists: [] });
@@ -63,10 +64,10 @@ export default function() {
     return resultSuccess;
   };
 
-  const getPlaylists = async () => {
+  const getPlaylists = async limit => {
     try {
       const response = await app.$axios.$get(
-        "https://api.spotify.com/v1/me/playlists",
+        `https://api.spotify.com/v1/me/playlists?limit=${limit}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken.value}`
@@ -94,6 +95,20 @@ export default function() {
       playlistInfo.value = response;
       console.log(response);
       playlist.value = response.tracks.items;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getTrack = async id => {
+    try {
+      const response = await app.$axios.$get(
+        `https://api.spotify.com/v1/tracks/${id}`,
+        { headers: { Authorization: `Bearer ${accessToken.value}` } }
+      );
+
+      track.value = response;
+      console.log(track.value);
     } catch (err) {
       console.log(err);
     }
@@ -169,6 +184,8 @@ export default function() {
     devices,
     playSongOnDevice,
     play,
-    pause
+    pause,
+    getTrack,
+    track
   };
 }

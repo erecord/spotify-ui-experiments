@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-center text-white text-2xl mt-5 mb-10 ">
+    <div class="text-center text-white text-2xl mt-5 mb-10">
       <h3>
         {{ playlistInfo.name }}
       </h3>
@@ -14,8 +14,9 @@
         :key="index"
         class="flex justify-center card mx-auto"
       >
-        <nuxt-link :to="{ name: 'song-uri', params: { uri: track.track.uri } }">
-          <div class="flex my-2 items-center bg-secondary rounded-sm ">
+        <!-- <nuxt-link :to="{ name: 'song-uri', params: { uri: track.track.uri } }"> -->
+        <nuxt-link :to="{ name: 'song-id', params: { id: track.track.id } }">
+          <div class="flex my-2 items-center bg-secondary rounded-sm">
             <img :src="track.track.album.images[0].url" class="" />
             <div class="flex-cols ml-4">
               <p class="text-white overflow-x">{{ track.track.name }}</p>
@@ -51,7 +52,7 @@ export default {
     });
 
     return { playlist, playlistInfo };
-  }
+  },
 };
 </script>
 
