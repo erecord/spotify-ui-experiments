@@ -7,6 +7,7 @@ const accessToken = ref("");
 const refreshToken = ref("");
 const playlists = ref([]);
 const playlist = ref({});
+const playlistInfo = ref({});
 
 export default function() {
   // const state = reactive({ accessToken: "", refreshToken: "", playlists: [] });
@@ -89,8 +90,8 @@ export default function() {
         }
       );
 
+      playlistInfo.value = response;
       console.log(response);
-
       playlist.value = response.tracks.items;
     } catch (err) {
       console.log(err);
@@ -103,6 +104,7 @@ export default function() {
     setAuthTokens,
     getPlaylists,
     getPlaylist,
-    playlist
+    playlist,
+    playlistInfo
   };
 }

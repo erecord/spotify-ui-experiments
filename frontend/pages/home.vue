@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="text-center text-white text-3xl my-2">
+  <div class="bg-primary">
+    <div class="text-center text-white text-3xl py-5">
       <h1>Spotify PWA</h1>
     </div>
     <div class="md:mx-32 mx-5">
@@ -16,7 +16,7 @@
           :key="index"
         >
           <nuxt-link :to="{ name: 'playlist-id', params: { id: playlist.id } }">
-            <img :src="playlist.images[0].url" class="" />
+            <img :src="playlist.images[0].url" />
             <p class="text-center md:text-xl pt-2 px-1">
               {{ playlist.name }}
             </p></nuxt-link
@@ -38,8 +38,6 @@ export default {
     onMounted(async () => {
       await getPlaylists();
     });
-
-    console.log(playlists);
 
     return { accessToken, playlists };
   }

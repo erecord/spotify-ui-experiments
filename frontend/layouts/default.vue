@@ -25,10 +25,13 @@ html {
 }
 
 body {
-  background: rgb(32, 32, 35);
+  background: #8bb8a8;
 }
 
 .bg-secondary {
-  background: rgb(29, 19, 31);
+  background: #92d1c3;
+}
+.bg-primary {
+  background: #8bb8a8;
 }
 </style>
