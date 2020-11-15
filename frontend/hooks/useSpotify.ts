@@ -11,34 +11,50 @@ const playlistInfo = ref({});
 const devices = ref({});
 const track = ref({});
 
-export default function() {
-  // const state = reactive({ accessToken: "", refreshToken: "", playlists: [] });
+export default function () {
+  const { app, env } = useContext();
 
-  const { app } = useContext();
+  const clientId = env.NUXT_ENV_SPOTIFY_CLIENT_ID;
+  const clientSecret = env.NUXT_ENV_SPOTIFY_CLIENT_SECRET;
+  const redirectUri = env.NUXT_ENV_SPOTIFY_REDIRECT_URI;
+  const scopes = env.NUXT_ENV_SPOTIFY_SCOPES;
 
-  if (process.browser) {
-    accessToken.value = localStorage.getItem("accessToken");
-    refreshToken.value = localStorage.getItem("refreshToken");
-  }
+  const loadTokensFromLocalStorage = () => {
+    if (process.browser) {
+      const accessTokenFromLocalStorage = localStorage.getItem("accessToken");
+      const refreshTokenFromLocalStorage = localStorage.getItem("refreshToken");
 
-  const setAuthTokens = async (code, redirectUri) => {
+      if (accessTokenFromLocalStorage) {
+        accessToken.value = accessTokenFromLocalStorage;
+      }
+      if (refreshTokenFromLocalStorage) {
+        refreshToken.value = refreshTokenFromLocalStorage;
+      }
+    }
+  };
+
+  loadTokensFromLocalStorage();
+
+  const setTokensToLocalStorage = () => {
+    localStorage.setItem("accessToken", accessToken.value);
+    localStorage.setItem("refreshToken", refreshToken.value);
+  };
+
+  const setAuthTokens = async (code: string) => {
     let resultSuccess = false;
-
-    const clientId = "65ccdc6f18874cb78e134e15b9465098";
-    const clientSecret = "7ad289318252493f9d34ca93b93908a3";
 
     const headers = {
       headers: {
         Authorization: `Basic ${Buffer.from(
           clientId + ":" + clientSecret
-        ).toString("base64")}`
-      }
+        ).toString("base64")}`,
+      },
     };
 
     const data = {
       grant_type: "authorization_code",
       code,
-      redirect_uri: redirectUri
+      redirect_uri: redirectUri,
     };
 
     try {
@@ -52,9 +68,7 @@ export default function() {
 
       accessToken.value = response.access_token;
       refreshToken.value = response.refresh_token;
-
-      localStorage.setItem("accessToken", accessToken.value);
-      localStorage.setItem("refreshToken", refreshToken.value);
+      setTokensToLocalStorage();
 
       resultSuccess = true;
     } catch (error) {
@@ -64,14 +78,26 @@ export default function() {
     return resultSuccess;
   };
 
-  const getPlaylists = async limit => {
+  const getSpotifyAuthUrl = () => {
+    return (
+      "https://accounts.spotify.com/authorize" +
+      "?response_type=code" +
+      "&client_id=" +
+      clientId +
+      (scopes ? "&scope=" + encodeURIComponent(scopes) : "") +
+      "&redirect_uri=" +
+      encodeURIComponent(redirectUri)
+    );
+  };
+
+  const getPlaylists = async (limit: number) => {
     try {
       const response = await app.$axios.$get(
         `https://api.spotify.com/v1/me/playlists?limit=${limit}`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken.value}`
-          }
+            Authorization: `Bearer ${accessToken.value}`,
+          },
         }
       );
 
@@ -81,14 +107,14 @@ export default function() {
     }
   };
 
-  const getPlaylist = async id => {
+  const getPlaylist = async (id: number) => {
     try {
       const response = await app.$axios.$get(
         `https://api.spotify.com/v1/playlists/${id}`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken.value}`
-          }
+            Authorization: `Bearer ${accessToken.value}`,
+          },
         }
       );
 
@@ -100,7 +126,7 @@ export default function() {
     }
   };
 
-  const getTrack = async id => {
+  const getTrack = async (id: number) => {
     try {
       const response = await app.$axios.$get(
         `https://api.spotify.com/v1/tracks/${id}`,
@@ -120,8 +146,8 @@ export default function() {
         `https://api.spotify.com/v1/me/player/devices`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken.value}`
-          }
+            Authorization: `Bearer ${accessToken.value}`,
+          },
         }
       );
 
@@ -131,43 +157,43 @@ export default function() {
     }
   };
 
-  const playSongOnDevice = async (id, trackUri) => {
+  const playSongOnDevice = async (id: number, trackUri: string) => {
     const response = await app.$axios.$put(
       `https://api.spotify.com/v1/me/player/play?device_id=${id}`,
       {
-        uris: [trackUri]
+        uris: [trackUri],
       },
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken.value}`
-        }
+          Authorization: `Bearer ${accessToken.value}`,
+        },
       }
     );
   };
 
-  const play = async id => {
+  const play = async (id: number) => {
     const response = await app.$axios.$put(
       `https://api.spotify.com/v1/me/player/play?device_id=${id}`,
       {},
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken.value}`
-        }
+          Authorization: `Bearer ${accessToken.value}`,
+        },
       }
     );
   };
 
-  const pause = async id => {
+  const pause = async (id: number) => {
     const response = await app.$axios.$put(
       `https://api.spotify.com/v1/me/player/pause?device_id=${id}`,
       {},
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken.value}`
-        }
+          Authorization: `Bearer ${accessToken.value}`,
+        },
       }
     );
   };
@@ -186,6 +212,7 @@ export default function() {
     play,
     pause,
     getTrack,
-    track
+    track,
+    getSpotifyAuthUrl,
   };
 }
