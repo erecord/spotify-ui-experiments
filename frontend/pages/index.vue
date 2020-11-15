@@ -1,56 +1,46 @@
 <template>
-  <div class="bg-primary">
-    <div class="text-center text-white text-3xl py-5">
-      <h1>Spotify PWA</h1>
-    </div>
-    <div class="md:mx-32 mx-5">
-      <div>
-        <nuxt-link to="/user-playlists"
-          ><h2 class="text-white text-2xl font-light">Playlists</h2></nuxt-link
-        >
-      </div>
-      <div
-        v-if="playlists"
-        class="text-white md:grid md:grid-cols-5 grid grid-cols-2 gap-5 mt-1"
-      >
-        <div
-          class="grid bg-secondary pb-2 rounded-md card"
-          v-for="(playlist, index) in playlists"
-          :key="index"
-        >
-          <nuxt-link :to="{ name: 'playlist-id', params: { id: playlist.id } }">
-            <img :src="playlist.images[0].url" />
-            <p class="text-center md:text-xl pt-2 px-1">
-              {{ playlist.name }}
-            </p></nuxt-link
-          >
-        </div>
-      </div>
-    </div>
+  <div>
+    <ul
+      class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-12"
+    >
+      <CardAlbum
+        v-for="playlist in playlists"
+        :key="playlist.id"
+        :artworkUrl="playlist.images[0].url"
+        :trackCount="playlist.tracks.total"
+      />
+    </ul>
+
+    <button
+      class="bg-blue-400 rounded-lg p-3 px-5 mt-12 cursor-pointer"
+      @click="handleShowClick"
+    >
+      Show
+    </button>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { onMounted } from "@nuxtjs/composition-api";
 import useSpotify from "../hooks/useSpotify";
+import useAppState from "../hooks/useAppState";
 
 export default {
   middleware: "auth",
   setup() {
     const { accessToken, getPlaylists, playlists } = useSpotify();
+    const { slideOverSpotifyAuthShow } = useAppState();
 
     onMounted(async () => {
       await getPlaylists(10);
+      console.log(playlists.value);
     });
 
-    return { accessToken, playlists };
-  },
+    const handleShowClick = () => {
+      slideOverSpotifyAuthShow();
+    };
+
+    return { accessToken, playlists, handleShowClick };
+  }
 };
 </script>
-
-<style>
-.card:hover {
-  opacity: 0.9;
-  transform: translateY(-1%);
-}
-</style>
