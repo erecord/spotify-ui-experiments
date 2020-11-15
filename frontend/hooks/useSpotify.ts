@@ -17,7 +17,7 @@ export default function () {
   const clientId = env.NUXT_ENV_SPOTIFY_CLIENT_ID;
   const clientSecret = env.NUXT_ENV_SPOTIFY_CLIENT_SECRET;
   const redirectUri = env.NUXT_ENV_SPOTIFY_REDIRECT_URI;
-  const scopes = env.NUXT_ENV_SPOTIFY_SCOPES;
+  const scope = env.NUXT_ENV_SPOTIFY_SCOPE;
 
   const loadTokensFromLocalStorage = () => {
     if (process.browser) {
@@ -84,7 +84,7 @@ export default function () {
       "?response_type=code" +
       "&client_id=" +
       clientId +
-      (scopes ? "&scope=" + encodeURIComponent(scopes) : "") +
+      (scope ? "&scope=" + encodeURIComponent(scope) : "") +
       "&redirect_uri=" +
       encodeURIComponent(redirectUri)
     );
