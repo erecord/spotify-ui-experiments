@@ -39,7 +39,7 @@
 
 <script>
 import { useContext, onMounted } from "@nuxtjs/composition-api";
-import useSpotify from "../../hooks/useSpotify.js";
+import useSpotify from "../../hooks/useSpotify";
 export default {
   setup() {
     const { params } = useContext();
@@ -52,7 +52,7 @@ export default {
     });
 
     return { playlist, playlistInfo };
-  },
+  }
 };
 </script>
 
