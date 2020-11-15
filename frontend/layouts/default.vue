@@ -1,8 +1,28 @@
 <template>
-  <div>
+  <div class="container mx-auto">
     <Nuxt />
+
+    <SlideOverSpotifyAuth
+      :hidden="slideOverSpotifyAuthHidden"
+      @slide-over-close="slideOverSpotifyAuthHide"
+    />
   </div>
 </template>
+
+<script>
+import { defineComponent } from "@nuxtjs/composition-api";
+import useAppState from "../hooks/useAppState";
+export default defineComponent({
+  setup() {
+    const {
+      slideOverSpotifyAuthHidden,
+      slideOverSpotifyAuthHide
+    } = useAppState();
+
+    return { slideOverSpotifyAuthHidden, slideOverSpotifyAuthHide };
+  }
+});
+</script>
 
 <style>
 html {
@@ -25,13 +45,6 @@ html {
 }
 
 body {
-  background: #8bb8a8;
-}
-
-.bg-secondary {
-  background: #92d1c3;
-}
-.bg-primary {
-  background: #8bb8a8;
+  background: #2191a5;
 }
 </style>
