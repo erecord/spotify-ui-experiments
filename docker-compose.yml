@@ -1,0 +1,16 @@
+version: "3.4"
+
+services:
+  frontend:
+    image: frontend
+    build: ./frontend
+    volumes:
+      - ./frontend:/usr/src/app
+      - frontend-node-modules:/usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    env_file:
+      - ./frontend/.env
+
+volumes:
+  frontend-node-modules:
